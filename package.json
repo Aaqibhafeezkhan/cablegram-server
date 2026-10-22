@@ -1,0 +1,38 @@
+{
+  "name": "@cablegram/server",
+  "version": "0.1.0",
+  "description": "Cablegram Community control-plane server for self-hosted households",
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seep-labs/cablegram-server.git"
+  },
+  "type": "module",
+  "bin": {
+    "cablegram-server": "./dist/apps/community/src/index.js"
+  },
+  "scripts": {
+    "build": "tsc && mkdir -p dist/packages/server-core/src/migrations && cp packages/server-core/src/migrations/*.sql dist/packages/server-core/src/migrations/",
+    "start": "node dist/apps/community/src/index.js",
+    "setup-code": "node dist/apps/community/src/index.js setup-code",
+    "backup": "node dist/apps/community/src/index.js backup",
+    "test": "node --test dist/tests/community/*.test.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.3.7",
+    "@fastify/websocket": "^11.3.1",
+    "bcryptjs": "^3.0.2",
+    "fastify": "^5.6.0",
+    "jose": "^6.0.11",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^24.3.1",
+    "typescript": "^5.9.2"
+  }
+}

@@ -1,0 +1,529 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "@cablegram/server",
+  "documentNamespace": "https://github.com/seep-labs/cablegram-server/spdx/0.1.0",
+  "creationInfo": {
+    "creators": [
+      "Tool: Cablegram-Export-Pipeline",
+      "Organization: Cablegram"
+    ],
+    "created": "2026-10-22T15:29:00.749Z"
+  },
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-Package-cablegram-server",
+      "name": "@cablegram/server",
+      "versionInfo": "0.1.0",
+      "downloadLocation": "git+https://github.com/seep-labs/cablegram-server.git",
+      "licenseConcluded": "GPL-3.0-only",
+      "licenseDeclared": "GPL-3.0-only",
+      "supplier": "Organization: Cablegram"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-1--electric-sql-pglite",
+      "name": "@electric-sql/pglite",
+      "versionInfo": "0.3.16",
+      "downloadLocation": "https://github.com/electric-sql/pglite",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-2--fastify-ajv-compiler",
+      "name": "@fastify/ajv-compiler",
+      "versionInfo": "4.0.6",
+      "downloadLocation": "https://github.com/fastify/ajv-compiler",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-3--fastify-error",
+      "name": "@fastify/error",
+      "versionInfo": "4.2.0",
+      "downloadLocation": "https://github.com/fastify/fastify-error",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-4--fastify-fast-json-stringify-compiler",
+      "name": "@fastify/fast-json-stringify-compiler",
+      "versionInfo": "5.1.0",
+      "downloadLocation": "https://github.com/fastify/fast-json-stringify-compiler",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-5--fastify-forwarded",
+      "name": "@fastify/forwarded",
+      "versionInfo": "3.0.2",
+      "downloadLocation": "https://github.com/fastify/forwarded",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-6--fastify-merge-json-schemas",
+      "name": "@fastify/merge-json-schemas",
+      "versionInfo": "0.2.1",
+      "downloadLocation": "https://github.com/fastify/merge-json-schemas",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-7--fastify-proxy-addr",
+      "name": "@fastify/proxy-addr",
+      "versionInfo": "5.1.0",
+      "downloadLocation": "https://github.com/fastify/proxy-addr",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-8--fastify-websocket",
+      "name": "@fastify/websocket",
+      "versionInfo": "11.3.1",
+      "downloadLocation": "https://github.com/fastify/fastify-websocket",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-9--pinojs-redact",
+      "name": "@pinojs/redact",
+      "versionInfo": "0.4.0",
+      "downloadLocation": "https://github.com/pinojs/redact",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-10-abstract-logging",
+      "name": "abstract-logging",
+      "versionInfo": "2.0.1",
+      "downloadLocation": "https://github.com/jsumners/abstract-logging",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-11-ajv",
+      "name": "ajv",
+      "versionInfo": "8.20.0",
+      "downloadLocation": "ajv-validator/ajv",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-12-ajv-formats",
+      "name": "ajv-formats",
+      "versionInfo": "3.0.1",
+      "downloadLocation": "https://github.com/ajv-validator/ajv-formats",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-13-atomic-sleep",
+      "name": "atomic-sleep",
+      "versionInfo": "1.0.0",
+      "downloadLocation": "https://github.com/davidmarkclements/atomic-sleep",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-14-avvio",
+      "name": "avvio",
+      "versionInfo": "9.3.0",
+      "downloadLocation": "https://github.com/fastify/avvio",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-15-bcryptjs",
+      "name": "bcryptjs",
+      "versionInfo": "3.0.3",
+      "downloadLocation": "https://github.com/dcodeIO/bcrypt.js",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-16-cookie",
+      "name": "cookie",
+      "versionInfo": "1.1.1",
+      "downloadLocation": "jshttp/cookie",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-17-dequal",
+      "name": "dequal",
+      "versionInfo": "2.0.3",
+      "downloadLocation": "lukeed/dequal",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-18-duplexify",
+      "name": "duplexify",
+      "versionInfo": "4.1.3",
+      "downloadLocation": "git://github.com/mafintosh/duplexify",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-19-end-of-stream",
+      "name": "end-of-stream",
+      "versionInfo": "1.4.5",
+      "downloadLocation": "git://github.com/mafintosh/end-of-stream",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-20-fast-decode-uri-component",
+      "name": "fast-decode-uri-component",
+      "versionInfo": "1.0.1",
+      "downloadLocation": "https://github.com/delvedor/fast-decode-uri-component",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-21-fast-deep-equal",
+      "name": "fast-deep-equal",
+      "versionInfo": "3.1.3",
+      "downloadLocation": "https://github.com/epoberezkin/fast-deep-equal",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-22-fast-json-stringify",
+      "name": "fast-json-stringify",
+      "versionInfo": "7.0.1",
+      "downloadLocation": "https://github.com/fastify/fast-json-stringify",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-23-fast-querystring",
+      "name": "fast-querystring",
+      "versionInfo": "1.1.2",
+      "downloadLocation": "https://github.com/anonrig/fast-querystring",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-24-fast-uri",
+      "name": "fast-uri",
+      "versionInfo": "3.1.8",
+      "downloadLocation": "https://github.com/fastify/fast-uri",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-25-fastify",
+      "name": "fastify",
+      "versionInfo": "5.12.4",
+      "downloadLocation": "https://github.com/fastify/fastify",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-26-fastify-plugin",
+      "name": "fastify-plugin",
+      "versionInfo": "6.0.0",
+      "downloadLocation": "https://github.com/fastify/fastify-plugin",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-27-fastq",
+      "name": "fastq",
+      "versionInfo": "1.20.3",
+      "downloadLocation": "https://github.com/mcollina/fastq",
+      "licenseConcluded": "ISC",
+      "licenseDeclared": "ISC"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-28-find-my-way",
+      "name": "find-my-way",
+      "versionInfo": "9.9.0",
+      "downloadLocation": "https://github.com/delvedor/find-my-way",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-29-inherits",
+      "name": "inherits",
+      "versionInfo": "2.0.4",
+      "downloadLocation": "git://github.com/isaacs/inherits",
+      "licenseConcluded": "ISC",
+      "licenseDeclared": "ISC"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-30-ipaddr-js",
+      "name": "ipaddr.js",
+      "versionInfo": "2.5.0",
+      "downloadLocation": "https://github.com/whitequark/ipaddr.js",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-31-jose",
+      "name": "jose",
+      "versionInfo": "6.2.12",
+      "downloadLocation": "panva/jose",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-32-json-schema-ref-resolver",
+      "name": "json-schema-ref-resolver",
+      "versionInfo": "3.0.0",
+      "downloadLocation": "https://github.com/fastify/json-schema-ref-resolver",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-33-json-schema-traverse",
+      "name": "json-schema-traverse",
+      "versionInfo": "1.0.0",
+      "downloadLocation": "https://github.com/epoberezkin/json-schema-traverse",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-34-light-my-request",
+      "name": "light-my-request",
+      "versionInfo": "6.6.0",
+      "downloadLocation": "https://github.com/fastify/light-my-request",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-35-on-exit-leak-free",
+      "name": "on-exit-leak-free",
+      "versionInfo": "2.1.2",
+      "downloadLocation": "https://github.com/mcollina/on-exit-or-gc",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-36-once",
+      "name": "once",
+      "versionInfo": "1.4.0",
+      "downloadLocation": "git://github.com/isaacs/once",
+      "licenseConcluded": "ISC",
+      "licenseDeclared": "ISC"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-37-pino",
+      "name": "pino",
+      "versionInfo": "10.3.1",
+      "downloadLocation": "https://github.com/pinojs/pino",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-38-pino-abstract-transport",
+      "name": "pino-abstract-transport",
+      "versionInfo": "3.0.0",
+      "downloadLocation": "https://github.com/pinojs/pino-abstract-transport",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-39-pino-std-serializers",
+      "name": "pino-std-serializers",
+      "versionInfo": "7.1.0",
+      "downloadLocation": "ssh://git@github.com/pinojs/pino-std-serializers",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-40-process-warning",
+      "name": "process-warning",
+      "versionInfo": "4.0.1",
+      "downloadLocation": "https://github.com/fastify/process-warning",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-41-quick-format-unescaped",
+      "name": "quick-format-unescaped",
+      "versionInfo": "4.0.4",
+      "downloadLocation": "https://github.com/davidmarkclements/quick-format",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-42-readable-stream",
+      "name": "readable-stream",
+      "versionInfo": "3.6.2",
+      "downloadLocation": "git://github.com/nodejs/readable-stream",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-43-real-require",
+      "name": "real-require",
+      "versionInfo": "0.2.0",
+      "downloadLocation": "https://github.com/pinojs/real-require",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-44-require-from-string",
+      "name": "require-from-string",
+      "versionInfo": "2.0.2",
+      "downloadLocation": "floatdrop/require-from-string",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-45-ret",
+      "name": "ret",
+      "versionInfo": "0.5.0",
+      "downloadLocation": "git://github.com/fent/ret.js",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-46-reusify",
+      "name": "reusify",
+      "versionInfo": "1.1.0",
+      "downloadLocation": "https://github.com/mcollina/reusify",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-47-rfdc",
+      "name": "rfdc",
+      "versionInfo": "1.4.1",
+      "downloadLocation": "https://github.com/davidmarkclements/rfdc",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-48-safe-buffer",
+      "name": "safe-buffer",
+      "versionInfo": "5.2.1",
+      "downloadLocation": "git://github.com/feross/safe-buffer",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-49-safe-regex2",
+      "name": "safe-regex2",
+      "versionInfo": "5.1.1",
+      "downloadLocation": "git://github.com/fastify/safe-regex2",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-50-safe-stable-stringify",
+      "name": "safe-stable-stringify",
+      "versionInfo": "2.5.0",
+      "downloadLocation": "https://github.com/BridgeAR/safe-stable-stringify",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-51-secure-json-parse",
+      "name": "secure-json-parse",
+      "versionInfo": "4.1.0",
+      "downloadLocation": "https://github.com/fastify/secure-json-parse",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-52-semver",
+      "name": "semver",
+      "versionInfo": "7.8.5",
+      "downloadLocation": "https://github.com/npm/node-semver",
+      "licenseConcluded": "ISC",
+      "licenseDeclared": "ISC"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-53-set-cookie-parser",
+      "name": "set-cookie-parser",
+      "versionInfo": "2.7.2",
+      "downloadLocation": "nfriedly/set-cookie-parser",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-54-sonic-boom",
+      "name": "sonic-boom",
+      "versionInfo": "4.2.1",
+      "downloadLocation": "https://github.com/pinojs/sonic-boom",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-55-split2",
+      "name": "split2",
+      "versionInfo": "4.2.0",
+      "downloadLocation": "https://github.com/mcollina/split2",
+      "licenseConcluded": "ISC",
+      "licenseDeclared": "ISC"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-56-stream-shift",
+      "name": "stream-shift",
+      "versionInfo": "1.0.3",
+      "downloadLocation": "https://github.com/mafintosh/stream-shift",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-57-string-decoder",
+      "name": "string_decoder",
+      "versionInfo": "1.3.0",
+      "downloadLocation": "git://github.com/nodejs/string_decoder",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-58-thread-stream",
+      "name": "thread-stream",
+      "versionInfo": "4.2.0",
+      "downloadLocation": "https://github.com/mcollina/thread-stream",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-59-toad-cache",
+      "name": "toad-cache",
+      "versionInfo": "3.7.4",
+      "downloadLocation": "https://github.com/kibertoad/toad-cache",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-60-util-deprecate",
+      "name": "util-deprecate",
+      "versionInfo": "1.0.2",
+      "downloadLocation": "git://github.com/TooTallNate/util-deprecate",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-61-wrappy",
+      "name": "wrappy",
+      "versionInfo": "1.0.2",
+      "downloadLocation": "https://github.com/npm/wrappy",
+      "licenseConcluded": "ISC",
+      "licenseDeclared": "ISC"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-62-ws",
+      "name": "ws",
+      "versionInfo": "8.21.3",
+      "downloadLocation": "https://github.com/websockets/ws",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "SPDXID": "SPDXRef-Package-63-zod",
+      "name": "zod",
+      "versionInfo": "4.6.5",
+      "downloadLocation": "https://github.com/colinhacks/zod",
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    }
+  ]
+}

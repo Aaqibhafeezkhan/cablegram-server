@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+
+# Runtime data & secrets
+data/
+secrets.json
+.env
+.env.*
+
+# Logs & temp
+*.log
+.DS_Store

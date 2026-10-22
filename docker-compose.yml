@@ -1,0 +1,38 @@
+services:
+  cablegram:
+    build: .
+    image: ghcr.io/cablegram/cablegram-server:0.1.0
+    restart: unless-stopped
+    environment:
+      PORT: "3000"
+      PGLITE_DIR: "/data"
+      PUBLIC_BASE_URL: "${PUBLIC_BASE_URL:-}"
+      REQUIRE_TLS: "${REQUIRE_TLS:-false}"
+      WEB_APP_ORIGINS: "${WEB_APP_ORIGINS:-}"
+      TELEGRAM_API_ID: "${TELEGRAM_API_ID:-}"
+      TELEGRAM_API_HASH: "${TELEGRAM_API_HASH:-}"
+    volumes:
+      - cablegram_data:/data
+    # For LAN-only HTTP without a reverse proxy, uncomment ports below:
+    # ports:
+    #   - "3000:3000"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      CABLEGRAM_DOMAIN: "${CABLEGRAM_DOMAIN:-localhost}"
+    command: caddy reverse-proxy --from "${CABLEGRAM_DOMAIN:-localhost}" --to cablegram:3000
+    depends_on:
+      - cablegram
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  cablegram_data:
+  caddy_data:
+  caddy_config:
