@@ -26,7 +26,8 @@ Cablegram Community is the open-source, self-hosted control-plane server for Cab
    ```bash
    docker compose logs cablegram
    ```
-3. In the Cablegram phone app, choose **Join a server**, enter your server URL and the 6-digit setup code, and pair your TV.
+3. In the Cablegram phone app, choose **Join a server**, enter your server URL and the 6-digit setup code.
+4. On the TV's **Pair this TV** screen, choose **Use your own server**, enter the same URL, then pair it from the phone with the PIN shown.
 
 If you ever lose all signed-in phones, mint a new recovery setup code from the server host:
 ```bash

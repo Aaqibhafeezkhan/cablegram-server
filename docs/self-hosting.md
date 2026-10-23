@@ -97,7 +97,9 @@ On first start, if `JWT_SECRET` and `PIN_PEPPER` are not provided in the environ
 ## 6. Pairing More Devices
 
 - **Additional phones:** On the new phone, choose **Join a server** -> **Request approval from an existing phone** (`POST /api/auth/join-requests`). The new phone displays a 6-digit confirmation code; approve it from your signed-in phone (`POST /api/auth/join-requests/:id/approve`).
-- **TVs:** Scan the TV pairing QR code or enter its 6-digit PIN from your phone. During LAN pairing, the phone hands your custom server URL to the TV so the TV switches to your server automatically. In TV Settings, the current server URL is shown alongside **Return to default server**.
+- **Android TV / Google TV:** On the TV's **Pair this TV** screen, choose **Use your own server** and enter your server URL (for example `http://192.168.1.20:3000`). The TV checks that it is a Cablegram server and shows a new PIN from it, with your server's address and **Return to Cablegram** below. Then enter that PIN, or scan the QR code, in the phone app. A phone signed in to your server reminds you of this step. Needs the latest phone and TV apps.
+- **LG and Samsung TVs (web app, preview):** open `https://tv.cablegram.app/?server=<your server URL>` once. Browsers block plain `http://` from that page, so this needs an HTTPS server, and your server must list `https://tv.cablegram.app` in `WEB_APP_ORIGINS`.
+- **Plain HTTP:** the apps accept `http://` only for home-network addresses (`10.x`, `172.16–31.x`, `192.168.x`, `.local`, `.lan`); anything else must use HTTPS.
 - **Family members:** Create household profiles (with optional 4–8 digit PINs and profile lock) inside the single household.
 
 ## 7. Remote Access (Reverse Proxy)
@@ -135,7 +137,8 @@ On first start, if `JWT_SECRET` and `PIN_PEPPER` are not provided in the environ
 
 - **Phone cannot reach the server:** Verify `/health` and `/api/server` are reachable from the phone's network and that WebSocket upgrades are enabled on your reverse proxy.
 - **Setup code expired or already used:** Run the `setup-code` CLI command above to issue a fresh 6-digit code.
-- **TV does not adopt the server URL:** Ensure the phone and TV are on the same local network during initial pairing so the phone can hand the server URL to the TV.
+- **"That code didn't match" when pairing a TV:** the TV is still on Cablegram's server. Choose **Use your own server** on the TV first; the pairing screen then shows your server's address.
+- **TV says "Could not reach that server":** check the URL from the TV's network (`/health` should answer `{"ok":true}`) and that the port is published (`ports: ["3000:3000"]` in LAN-only mode).
 - **Library shows text placeholders instead of posters:** Expected in Community (`features.artwork: false`). Titles, years, and summaries can be edited manually from the phone app.
 - **Phone-local media will not play away from home:** Expected in Community (`features.relay: false`); phone and TV must share a local network for direct LAN streaming.
 
