@@ -66,7 +66,8 @@ Community excludes hosted-only plugins:
 | Variable | Default | Required | Purpose |
 |---|---|---|---|
 | `PORT` | `3000` | No | HTTP listen port |
-| `PGLITE_DIR` | `/data` | No | Directory for the embedded PGlite database, `secrets.json`, and `backup.sock` |
+| `PGLITE_DIR` | `/data` | No | Directory for the embedded PGlite database and `secrets.json` |
+| `BACKUP_SOCKET` | *(temp directory, one per data directory)* | No | UNIX socket the `backup` and `setup-code` commands use to reach the running server. Keep it outside `PGLITE_DIR` |
 | `PUBLIC_BASE_URL` | *(request host)* | Recommended | Canonical base URL (`https://...` or `http://<lan-ip>:3000`) |
 | `TRUST_PROXY` | `false` (`true` in the Compose file) | No | Trust `X-Forwarded-For`/`X-Real-IP` for per-client rate limits. Enable only when the server is reachable through the proxy alone |
 | `REQUIRE_TLS` | `true` in production | No | Rejects plain `http` `X-Forwarded-Proto` requests when `true` |
@@ -83,7 +84,6 @@ On first start, if `JWT_SECRET` and `PIN_PEPPER` are not provided in the environ
 `/data` contains:
 - PGlite PostgreSQL data files
 - `secrets.json` (mode `0600`)
-- `backup.sock` (mode `0600`, UNIX domain socket for live snapshots and setup codes)
 
 ## 5. First-Time Setup
 
@@ -146,5 +146,5 @@ Cablegram Community makes **zero** outbound requests to AI providers, catalog me
 ## 11. Support, Security, and License
 
 - **License:** `GPL-3.0-only` (see [`LICENSE`](../LICENSE)).
-- **Contributions:** Source mirror; outside pull requests are not accepted in v1 (see [`CONTRIBUTING.md`](../CONTRIBUTING.md)).
+- **Contributions:** Pull requests are welcome; see [`CONTRIBUTING.md`](../CONTRIBUTING.md) and the [good first issues](https://github.com/seep-labs/cablegram-server/labels/good%20first%20issue).
 - **Security:** See [`SECURITY.md`](../SECURITY.md) for private vulnerability disclosure.

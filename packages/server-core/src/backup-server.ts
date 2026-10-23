@@ -1,11 +1,23 @@
 import { createServer } from "node:http";
 import { chmod, lstat, unlink } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import type { PGlite } from "@electric-sql/pglite";
 
 /** A live filesystem snapshot must wait for entire transactions, not just SQL statements. */
 export async function snapshotDatabase(db: PGlite): Promise<Blob> {
   await db.exec("CHECKPOINT");
   return db._runExclusiveTransaction(() => db.runExclusive(() => db.dumpDataDir("gzip")));
+}
+
+/**
+ * Default socket for a data directory. It must live outside that directory: `dumpDataDir` archives every
+ * file in it and fails on a socket.
+ */
+export function defaultBackupSocketPath(dataDir: string): string {
+  const id = createHash("sha256").update(resolve(dataDir)).digest("hex").slice(0, 12);
+  return join(tmpdir(), `cablegram-backup-${id}.sock`);
 }
 
 export type BackupServerOptions = {
@@ -53,9 +65,9 @@ export async function startBackupServer(db: PGlite, socketPath: string, options:
         "cache-control": "no-store",
       });
       res.end(body);
-    } catch {
+    } catch (error) {
       res.writeHead(500).end();
-      console.error("Database snapshot failed");
+      console.error("Database snapshot failed", error);
     } finally {
       busy = false;
     }

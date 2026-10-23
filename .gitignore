@@ -9,6 +9,7 @@ data/
 secrets.json
 .env
 .env.*
+!.env.example
 
 # Logs & temp
 *.log

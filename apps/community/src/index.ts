@@ -9,12 +9,13 @@ import {
   ensureInitialSetupCode,
   issueSetupCode,
   applyPersistedSecrets,
+  defaultBackupSocketPath,
   migrateCore,
   startBackupServer,
 } from "../../../packages/server-core/src/index.ts";
 
 function getSocketPath(): string {
-  return process.env.BACKUP_SOCKET || join(coreConfig.dataDir, "backup.sock");
+  return process.env.BACKUP_SOCKET || defaultBackupSocketPath(coreConfig.dataDir);
 }
 
 function callBackupSocket(path: string): Promise<{ statusCode: number; body: Buffer }> {

@@ -1,16 +1,20 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, statSync } from "node:fs";
+import { request } from "node:http";
+import { PGlite } from "@electric-sql/pglite";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 import {
   buildCoreApp,
   createCoreTestDb,
+  defaultBackupSocketPath,
   ensureInitialSetupCode,
   issueSetupCode,
   loadOrCreateSecrets,
   migrateCore,
+  startBackupServer,
 } from "../../packages/server-core/src/index.ts";
 
 test("community db applies only core migrations and enforces downgrade protection", async () => {
@@ -362,6 +366,32 @@ test("loadOrCreateSecrets auto-generates secrets.json with 0600 permissions and 
     const second = loadOrCreateSecrets(dir);
     assert.deepEqual(second, first);
   } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("live backup through the default socket snapshots a file-backed database", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "cablegram-backup-"));
+  const socketPath = defaultBackupSocketPath(dir);
+  assert.ok(!socketPath.startsWith(dir), "the socket must not be inside the archived data directory");
+  const db = new PGlite(dir);
+  const server = await startBackupServer(db, socketPath);
+  try {
+    await migrateCore(db);
+    const { statusCode, body } = await new Promise<{ statusCode: number; body: Buffer }>((resolve, reject) => {
+      const req = request({ socketPath, path: "/snapshot", method: "POST" }, (res) => {
+        const chunks: Buffer[] = [];
+        res.on("data", (chunk: Buffer) => chunks.push(chunk));
+        res.on("end", () => resolve({ statusCode: res.statusCode ?? 0, body: Buffer.concat(chunks) }));
+      });
+      req.on("error", reject);
+      req.end();
+    });
+    assert.equal(statusCode, 200);
+    assert.deepEqual([...body.subarray(0, 2)], [0x1f, 0x8b]);
+  } finally {
+    server.close();
+    await db.close();
     rmSync(dir, { recursive: true, force: true });
   }
 });
