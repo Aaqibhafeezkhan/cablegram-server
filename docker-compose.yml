@@ -8,6 +8,8 @@ services:
       PGLITE_DIR: "/data"
       PUBLIC_BASE_URL: "${PUBLIC_BASE_URL:-}"
       REQUIRE_TLS: "${REQUIRE_TLS:-false}"
+      # Only the proxy can reach this container, so its forwarded client address is trusted for rate limits.
+      TRUST_PROXY: "${TRUST_PROXY:-true}"
       WEB_APP_ORIGINS: "${WEB_APP_ORIGINS:-}"
       TELEGRAM_API_ID: "${TELEGRAM_API_ID:-}"
       TELEGRAM_API_HASH: "${TELEGRAM_API_HASH:-}"

@@ -21,7 +21,7 @@ export const CORE_PURGE_STEPS: PurgeStep[] = [
   ["telegram_phone_logins", `DELETE FROM telegram_phone_logins WHERE expires_at < NOW() - INTERVAL '1 day'`],
   ["telegram_tv_password_requests", `DELETE FROM telegram_tv_password_requests WHERE expires_at < NOW() - INTERVAL '1 day'`],
   ["setup_codes", `DELETE FROM setup_codes WHERE expires_at < NOW() - INTERVAL '1 day'`],
-  ["phone_join_requests", `DELETE FROM phone_join_requests WHERE expires_at < NOW() - INTERVAL '1 day'`],
+  ["phone_join_requests", `DELETE FROM phone_join_requests WHERE expires_at < NOW() - INTERVAL '1 hour'`],
   ["auth_rate_limits", `DELETE FROM auth_rate_limits WHERE window_start < NOW() - INTERVAL '1 day'`],
   ["pairing_sessions", `DELETE FROM pairing_sessions WHERE expires_at < NOW() - INTERVAL '1 day'`],
   ["private_playback_grants", `DELETE FROM private_playback_grants WHERE expires_at < NOW() - INTERVAL '1 day'`],

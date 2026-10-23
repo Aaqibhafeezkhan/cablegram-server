@@ -68,6 +68,7 @@ Community excludes hosted-only plugins:
 | `PORT` | `3000` | No | HTTP listen port |
 | `PGLITE_DIR` | `/data` | No | Directory for the embedded PGlite database, `secrets.json`, and `backup.sock` |
 | `PUBLIC_BASE_URL` | *(request host)* | Recommended | Canonical base URL (`https://...` or `http://<lan-ip>:3000`) |
+| `TRUST_PROXY` | `false` (`true` in the Compose file) | No | Trust `X-Forwarded-For`/`X-Real-IP` for per-client rate limits. Enable only when the server is reachable through the proxy alone |
 | `REQUIRE_TLS` | `true` in production | No | Rejects plain `http` `X-Forwarded-Proto` requests when `true` |
 | `WEB_APP_ORIGINS` | *(empty)* | No | Comma-separated origins allowed by CORS for Web Remote or TV Web |
 | `TELEGRAM_API_ID` | *(empty)* | Optional | Telegram API ID from `https://my.telegram.org` |

@@ -95,28 +95,29 @@ export function registerDeviceSignInRoutes(app: FastifyInstance, db: PGlite) {
     await enforce(db, [{ key: limitKey("setup-claim-ip", ip), limit: 20, windowSeconds: HOUR }]);
     checkPinRate(`setup:${ip}`, "too_many_setup_attempts");
 
-    const active = await db.query<{ id: string; code_hash: string; expires_at: string; attempts: number }>(
-      `SELECT id, code_hash, expires_at, attempts FROM setup_codes
-       WHERE used_at IS NULL ORDER BY created_at DESC LIMIT 1`,
+    const active = await db.query<{ id: string; code_hash: string }>(
+      `SELECT id, code_hash FROM setup_codes
+       WHERE used_at IS NULL AND expires_at > NOW() AND attempts < $1 ORDER BY created_at DESC LIMIT 1`,
+      [MAX_SETUP_ATTEMPTS],
     );
     const row = active.rows[0];
     if (!row) {
       recordPinFail(`setup:${ip}`);
       return reply.code(400).send({ error: "invalid_setup_code" });
     }
-    if (new Date(row.expires_at) <= new Date() || row.attempts >= MAX_SETUP_ATTEMPTS) {
+    // Every guess is counted before it is compared, in one statement, so concurrent guesses cannot exceed the limit.
+    const counted = await db.query<{ attempts: number }>(
+      `UPDATE setup_codes SET attempts = attempts + 1,
+         expires_at = CASE WHEN attempts + 1 >= $2 THEN NOW() ELSE expires_at END
+       WHERE id = $1 AND used_at IS NULL AND expires_at > NOW() AND attempts < $2 RETURNING attempts`,
+      [row.id, MAX_SETUP_ATTEMPTS],
+    );
+    if (!counted.rows[0]) {
       recordPinFail(`setup:${ip}`);
       return reply.code(400).send({ error: "setup_code_expired" });
     }
-    const expectedHash = hashToken(body.code);
-    if (!safeEqual(row.code_hash, expectedHash)) {
+    if (!safeEqual(row.code_hash, hashToken(body.code))) {
       recordPinFail(`setup:${ip}`);
-      await db.query(
-        `UPDATE setup_codes SET attempts = attempts + 1,
-           expires_at = CASE WHEN attempts + 1 >= $2 THEN NOW() ELSE expires_at END
-         WHERE id = $1`,
-        [row.id, MAX_SETUP_ATTEMPTS],
-      );
       return reply.code(400).send({ error: "invalid_setup_code" });
     }
 
@@ -227,10 +228,8 @@ export function registerDeviceSignInRoutes(app: FastifyInstance, db: PGlite) {
     const { id } = z.object({ id: z.string().uuid() }).parse(req.params);
     const authz = req.headers.authorization ?? "";
     const headerSecret = authz.startsWith("Join ") ? authz.slice(5).trim() : "";
-    const querySecret = typeof (req.query as { poll_secret?: unknown })?.poll_secret === "string"
-      ? String((req.query as { poll_secret: string }).poll_secret)
-      : "";
-    const pollSecret = headerSecret || querySecret;
+    // Header only: a secret in the query string ends up in proxy and access logs.
+    const pollSecret = headerSecret;
     if (!pollSecret) throw Object.assign(new Error("unauthorized"), { statusCode: 401 });
 
     const r = await db.query<{
@@ -311,6 +310,14 @@ export function registerDeviceSignInRoutes(app: FastifyInstance, db: PGlite) {
       return { ok: true, status: "denied" as const };
     }
 
+    // Claim the request first, so two approvals at once cannot each create a device.
+    const claimed = await db.query<{ id: string }>(
+      `UPDATE phone_join_requests SET status = 'approved', approved_by_user_id = $2, resolved_at = NOW()
+       WHERE id = $1 AND status = 'pending' AND expires_at > NOW() RETURNING id`,
+      [requestId, approverUserId],
+    );
+    if (!claimed.rows[0]) throw Object.assign(new Error("join_request_not_pending"), { statusCode: 409 });
+
     const deviceId = randomUUID();
     const deviceSecret = randomSecret();
     await db.query(
@@ -320,11 +327,8 @@ export function registerDeviceSignInRoutes(app: FastifyInstance, db: PGlite) {
     );
     const tokens = await issueSession(db, approverUserId, householdId, undefined, randomUUID(), deviceId);
     await db.query(
-      `UPDATE phone_join_requests
-       SET status = 'approved', approved_by_user_id = $2, device_id = $3,
-           access_token = $4, refresh_token = $5, resolved_at = NOW()
-       WHERE id = $1 AND status = 'pending'`,
-      [requestId, approverUserId, deviceId, tokens.access_token, tokens.refresh_token],
+      `UPDATE phone_join_requests SET device_id = $2, access_token = $3, refresh_token = $4 WHERE id = $1`,
+      [requestId, deviceId, tokens.access_token, tokens.refresh_token],
     );
     return { ok: true, status: "approved" as const, device_id: deviceId };
   }

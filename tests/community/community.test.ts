@@ -183,6 +183,22 @@ test("device sign-in: setup code bootstrap, join request approval, denial, and p
     assert.equal(pendingList.json().requests[0].id, joinReq.id);
     assert.equal(pendingList.json().requests[0].device_name, "Second Phone");
 
+    // A secret in the query string is not accepted
+    const pollQuery = await app.inject({
+      method: "GET",
+      url: `/api/auth/join-requests/${joinReq.id}?poll_secret=${joinReq.poll_secret}`,
+    });
+    assert.equal(pollQuery.statusCode, 401);
+
+    // A wrong code is refused
+    const wrongCode = await app.inject({
+      method: "POST",
+      url: `/api/auth/join-requests/${joinReq.id}/approve`,
+      headers: ownerAuth,
+      payload: { short_code: joinReq.short_code === "000000" ? "000001" : "000000" },
+    });
+    assert.equal(wrongCode.statusCode, 400);
+
     // Owner phone approves the join request
     const approveRes = await app.inject({
       method: "POST",

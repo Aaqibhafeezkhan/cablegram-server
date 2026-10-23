@@ -36,12 +36,17 @@ export async function enforce(db: PGlite, limits: { key: string; limit: number; 
 type RequestLike = { headers: Record<string, string | string[] | undefined>; socket: { remoteAddress?: string } };
 
 /**
- * The caller's address. Reverse proxies set X-Real-IP from $remote_addr, so it is trusted only on connections from loopback
- * (the proxy); anyone else could write the header themselves.
+ * The caller's address. A reverse proxy sets X-Real-IP / X-Forwarded-For, so they are trusted on connections from loopback,
+ * or from any peer when TRUST_PROXY=true (the server is then reachable only through the proxy, as in the Compose example).
+ * Otherwise anyone could write the header themselves.
  */
 export function clientIp(req: RequestLike): string {
   const remote = req.socket.remoteAddress ?? "unknown";
   const loopback = remote === "127.0.0.1" || remote === "::1" || remote === "::ffff:127.0.0.1";
+  if (!loopback && !coreConfig.trustProxy) return remote;
   const real = req.headers["x-real-ip"];
-  return loopback && typeof real === "string" && real ? real : remote;
+  if (typeof real === "string" && real.trim()) return real.trim();
+  const forwarded = req.headers["x-forwarded-for"];
+  const first = (Array.isArray(forwarded) ? forwarded[0] : forwarded)?.split(",")[0]?.trim();
+  return first || remote;
 }

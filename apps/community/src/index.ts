@@ -8,7 +8,7 @@ import {
   coreConfig,
   ensureInitialSetupCode,
   issueSetupCode,
-  loadOrCreateSecrets,
+  applyPersistedSecrets,
   migrateCore,
   startBackupServer,
 } from "../../../packages/server-core/src/index.ts";
@@ -33,7 +33,7 @@ function callBackupSocket(path: string): Promise<{ statusCode: number; body: Buf
 }
 
 async function runSetupCodeCli(): Promise<void> {
-  loadOrCreateSecrets(coreConfig.dataDir);
+  applyPersistedSecrets(coreConfig.dataDir);
   try {
     const res = await callBackupSocket("/setup-code");
     if (res.statusCode === 200) {
@@ -74,7 +74,7 @@ async function runBackupCli(outputPath?: string): Promise<void> {
 
 async function startServer(): Promise<void> {
   mkdirSync(coreConfig.dataDir, { recursive: true });
-  loadOrCreateSecrets(coreConfig.dataDir);
+  applyPersistedSecrets(coreConfig.dataDir);
   const db = new PGlite(coreConfig.dataDir);
   await migrateCore(db);
 

@@ -1,7 +1,7 @@
 FROM node:22-bookworm-slim AS build
 WORKDIR /app
-COPY package.json tsconfig.json ./
-RUN npm install
+COPY package.json package-lock.json tsconfig.json ./
+RUN npm ci
 COPY packages ./packages
 COPY apps ./apps
 COPY tests ./tests

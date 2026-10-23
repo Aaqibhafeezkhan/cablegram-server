@@ -58,8 +58,18 @@ export function loadOrCreateSecrets(dataDir: string, env: NodeJS.ProcessEnv = pr
 const jwtSecret = process.env.JWT_SECRET ?? "dev-jwt-secret-change-me";
 const pinPepper = process.env.PIN_PEPPER ?? "dev-pin-pepper";
 
-if (production && (jwtSecret.startsWith("dev-") || pinPepper.startsWith("dev-"))) {
-  throw new Error("Set JWT_SECRET and PIN_PEPPER in production (not the dev defaults).");
+/** Refuses the `dev-` defaults in production. The hosted entry point calls this at import; Community generates its own secrets instead. */
+export function assertProductionSecrets(): void {
+  if (production && (coreConfig.jwtSecret.startsWith("dev-") || coreConfig.pinPepper.startsWith("dev-"))) {
+    throw new Error("Set JWT_SECRET and PIN_PEPPER in production (not the dev defaults).");
+  }
+}
+
+/** Loads or generates the persisted secrets and makes them the ones every module uses. Call once at startup, before serving. */
+export function applyPersistedSecrets(dataDir: string): void {
+  const secrets = loadOrCreateSecrets(dataDir);
+  coreConfig.jwtSecret = secrets.jwtSecret;
+  coreConfig.pinPepper = secrets.pinPepper;
 }
 
 export const coreConfig = {
@@ -72,4 +82,6 @@ export const coreConfig = {
   publicBaseUrl: process.env.PUBLIC_BASE_URL || undefined,
   webAppOrigins: process.env.WEB_APP_ORIGINS || undefined,
   serverVersion: process.env.SERVER_VERSION || "0.1.0",
+  /** Trust X-Forwarded-For / X-Real-IP from any peer. Only safe when the server is reachable through the reverse proxy alone. */
+  trustProxy: process.env.TRUST_PROXY === "true",
 };
