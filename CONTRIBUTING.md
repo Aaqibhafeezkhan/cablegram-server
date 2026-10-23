@@ -1,13 +1,39 @@
 # Contributing to Cablegram Community Server
 
-Thank you for your interest in Cablegram Community Server.
+Thanks for helping. Pull requests are welcome: bug fixes, tests, documentation and self-hosting improvements.
 
-## Source Mirror and Pull Policy (v1)
+## Before you open a pull request
 
-This repository is exported automatically from the internal Cablegram monorepo so that the self-hosted Community server and the hosted service always share the exact same core codebase.
+- Open an issue first for anything larger than a small fix, so we can agree on the approach.
+- Issues labelled [`good first issue`](https://github.com/seep-labs/cablegram-server/labels/good%20first%20issue)
+  are a good place to start. Comment on one to claim it.
+- Run the checks CI runs, with Node.js 22:
 
-Because changes here are overwritten by the automated export pipeline:
+  ```bash
+  npm ci
+  npm run typecheck
+  npm run build
+  npm test
+  ```
 
-- **Pull requests are not accepted in v1.** Please do not open pull requests against this repository.
-- **Bug reports and feature feedback are welcome.** Open a GitHub Issue describing the steps to reproduce, your server version (`GET /api/server`), and client platform.
-- **Security vulnerabilities:** Do not report security issues in public GitHub Issues. Follow the instructions in [`SECURITY.md`](SECURITY.md).
+- A change to an HTTP route or a response the apps rely on must keep working with the released phone and TV apps.
+  Describe the compatibility impact in the pull request.
+- Never commit secrets, tokens or pairing codes, including in tests and logs.
+
+## Sign-off
+
+Sign off every commit with the [Developer Certificate of Origin](https://developercertificate.org/):
+`git commit -s`. A CI check verifies it. Your contribution is licensed under GPL-3.0-only, like the rest of the
+repository.
+
+## How changes are merged
+
+The same core code also runs the hosted Cablegram service, maintained in a private repository. After a pull request
+is merged here, a maintainer imports it there with your authorship kept, and later releases include it. Keeping a
+pull request small and focused makes that step quick.
+
+Maintainers merge with squash, so your pull request becomes one commit under your name.
+
+## Security issues
+
+Do not report security issues in public issues or pull requests. Follow [`SECURITY.md`](SECURITY.md).
