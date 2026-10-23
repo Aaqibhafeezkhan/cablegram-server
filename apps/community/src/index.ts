@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { request } from "node:http";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { PGlite } from "@electric-sql/pglite";
 import {
@@ -13,12 +13,14 @@ import {
   startBackupServer,
 } from "../../../packages/server-core/src/index.ts";
 
-const socketPath = process.env.BACKUP_SOCKET || join(coreConfig.dataDir, "backup.sock");
+function getSocketPath(): string {
+  return process.env.BACKUP_SOCKET || join(coreConfig.dataDir, "backup.sock");
+}
 
 function callBackupSocket(path: string): Promise<{ statusCode: number; body: Buffer }> {
   return new Promise((resolve, reject) => {
     const req = request(
-      { socketPath, path, method: "POST" },
+      { socketPath: getSocketPath(), path, method: "POST" },
       (res) => {
         const chunks: Buffer[] = [];
         res.on("data", (chunk: Buffer) => chunks.push(chunk));
@@ -33,6 +35,7 @@ function callBackupSocket(path: string): Promise<{ statusCode: number; body: Buf
 }
 
 async function runSetupCodeCli(): Promise<void> {
+  mkdirSync(coreConfig.dataDir, { recursive: true });
   applyPersistedSecrets(coreConfig.dataDir);
   try {
     const res = await callBackupSocket("/setup-code");
@@ -47,8 +50,8 @@ async function runSetupCodeCli(): Promise<void> {
     if (code !== "ENOENT" && code !== "ECONNREFUSED") {
       throw err;
     }
-    mkdirSync(coreConfig.dataDir, { recursive: true });
     const db = new PGlite(coreConfig.dataDir);
+    await db.waitReady;
     try {
       await migrateCore(db);
       const issued = await issueSetupCode(db);
@@ -74,8 +77,18 @@ async function runBackupCli(outputPath?: string): Promise<void> {
 
 async function startServer(): Promise<void> {
   mkdirSync(coreConfig.dataDir, { recursive: true });
-  applyPersistedSecrets(coreConfig.dataDir);
-  const db = new PGlite(coreConfig.dataDir);
+  const isFresh = !existsSync(join(coreConfig.dataDir, "PG_VERSION"));
+  let db: PGlite;
+  if (isFresh) {
+    db = new PGlite(coreConfig.dataDir);
+    await db.waitReady;
+    applyPersistedSecrets(coreConfig.dataDir);
+  } else {
+    applyPersistedSecrets(coreConfig.dataDir);
+    db = new PGlite(coreConfig.dataDir);
+    await db.waitReady;
+  }
+
   await migrateCore(db);
 
   const initial = await ensureInitialSetupCode(db);
@@ -87,7 +100,7 @@ async function startServer(): Promise<void> {
     console.log("============================================================");
   }
 
-  const backupServer = await startBackupServer(db, socketPath, {
+  const backupServer = await startBackupServer(db, getSocketPath(), {
     onSetupCode: () => issueSetupCode(db),
   });
   const app = await buildCoreApp(db, { edition: "community" });
