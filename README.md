@@ -1,5 +1,9 @@
 # Cablegram Community Server
 
+[![CI](https://github.com/seep-labs/cablegram-server/actions/workflows/ci.yml/badge.svg)](https://github.com/seep-labs/cablegram-server/actions/workflows/ci.yml)
+[![License: GPL-3.0-only](https://img.shields.io/badge/license-GPL--3.0--only-blue)](LICENSE)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
+
 Cablegram Community is the open-source, self-hosted control-plane server for Cablegram households. It lets your phone and TV pair, manage profiles and profile locks, sync your video catalog, play videos directly over your home LAN or from your own Telegram channel, and use your phone as a TV remote.
 
 ## What Is Included in Community
