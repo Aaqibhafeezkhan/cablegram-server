@@ -46,6 +46,10 @@ npm run build
 npm test
 ```
 
+## Support the project
+
+Cablegram is free and open source. If it makes your movie nights easier, you can help cover server costs and keep development going on [Ko-fi](https://ko-fi.com/cablegram).
+
 ## License
 
 Cablegram Community Server is licensed under the [GNU General Public License v3.0](LICENSE) (`GPL-3.0-only`).
