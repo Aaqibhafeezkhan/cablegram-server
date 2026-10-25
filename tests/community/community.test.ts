@@ -395,3 +395,117 @@ test("live backup through the default socket snapshots a file-backed database", 
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("TV pairing covers PIN request, phone claim, expiration, invalid PIN, and rate limiting", async () => {
+  const db = await createCoreTestDb();
+  const app = await buildCoreApp(db);
+  try {
+    const initial = await ensureInitialSetupCode(db);
+    assert.ok(initial);
+    const setupRes = await app.inject({
+      method: "POST",
+      url: "/api/auth/setup/claim",
+      payload: { code: initial.code, device_name: "Owner Phone", household_name: "Pairing Test Home" },
+    });
+    assert.equal(setupRes.statusCode, 201, setupRes.body);
+    const owner = setupRes.json() as { access_token: string; household_id: string };
+    const ownerAuth = { authorization: `Bearer ${owner.access_token}` };
+
+    const tvStart = await app.inject({
+      method: "POST",
+      url: "/api/auth/device",
+      payload: { deviceName: "Living Room TV" },
+    });
+    assert.equal(tvStart.statusCode, 201, tvStart.body);
+    const tv = tvStart.json() as { session_id: string; pin: string; pairing_token: string; expires_at: string };
+    assert.match(tv.pin, /^\d{6}$/);
+    assert.ok(tv.pairing_token);
+    assert.ok(Date.parse(tv.expires_at) > Date.now());
+
+    const claim = await app.inject({
+      method: "POST",
+      url: "/api/auth/device/claim",
+      headers: ownerAuth,
+      payload: { pin: tv.pin, tv_display_name: "Living Room TV" },
+    });
+    assert.equal(claim.statusCode, 200, claim.body);
+    assert.equal(claim.json().pairing_session_id, tv.session_id);
+    assert.ok(claim.json().device_id);
+    assert.ok(claim.json().lan_capability);
+
+    const poll = await app.inject({
+      method: "GET",
+      url: `/api/auth/device/${tv.session_id}`,
+      headers: { authorization: `Pairing ${tv.pairing_token}` },
+    });
+    assert.equal(poll.statusCode, 200, poll.body);
+    assert.equal(poll.json().status, "paired");
+    assert.ok(poll.json().access_token);
+    assert.equal(poll.json().device_id, claim.json().device_id);
+    assert.ok(poll.json().lan_capability);
+
+    const wrongPinSession = await app.inject({
+      method: "POST",
+      url: "/api/auth/device",
+      payload: { deviceName: "Wrong PIN TV" },
+    });
+    assert.equal(wrongPinSession.statusCode, 201, wrongPinSession.body);
+    const wrongTv = wrongPinSession.json() as { pin: string };
+    const knownPins = new Set([tv.pin, wrongTv.pin]);
+    const invalidPin = ["000000", "000001", "999999"].find((pin) => !knownPins.has(pin));
+    assert.ok(invalidPin);
+    const wrongClaim = await app.inject({
+      method: "POST",
+      url: "/api/auth/device/claim",
+      headers: ownerAuth,
+      payload: { pin: invalidPin },
+    });
+    assert.equal(wrongClaim.statusCode, 400);
+    assert.equal(wrongClaim.json().error, "invalid_pin");
+
+    const expiredSession = await app.inject({
+      method: "POST",
+      url: "/api/auth/device",
+      payload: { deviceName: "Expired PIN TV" },
+    });
+    const expiredTv = expiredSession.json() as { session_id: string; pin: string };
+    knownPins.add(expiredTv.pin);
+    await db.query(
+      "UPDATE pairing_sessions SET expires_at = NOW() - INTERVAL '1 second' WHERE id = $1",
+      [expiredTv.session_id],
+    );
+    const expiredClaim = await app.inject({
+      method: "POST",
+      url: "/api/auth/device/claim",
+      headers: ownerAuth,
+      payload: { pin: expiredTv.pin },
+    });
+    assert.equal(expiredClaim.statusCode, 400);
+    assert.equal(expiredClaim.json().error, "pin_expired");
+
+    const rateLimitPin = ["000000", "000001", "000002", "999999"].find((pin) => !knownPins.has(pin));
+    assert.ok(rateLimitPin);
+    // The wrong and expired PINs above count toward the household limit; six more failures reach eight.
+    for (let i = 0; i < 6; i += 1) {
+      const failed: Awaited<ReturnType<typeof app.inject>> = await app.inject({
+        method: "POST",
+        url: "/api/auth/device/claim",
+        headers: ownerAuth,
+        payload: { pin: rateLimitPin },
+      });
+      assert.equal(failed.statusCode, 400);
+      assert.equal(failed.json().error, "invalid_pin");
+    }
+    const rateLimited = await app.inject({
+      method: "POST",
+      url: "/api/auth/device/claim",
+      headers: ownerAuth,
+      payload: { pin: rateLimitPin },
+    });
+    assert.equal(rateLimited.statusCode, 429);
+    assert.equal(rateLimited.json().error, "too_many_pin_attempts");
+  } finally {
+    await app.close();
+    await db.close();
+  }
+});
